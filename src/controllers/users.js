@@ -18,7 +18,7 @@ exports.createUser = async (req, res) => {
     try {
         const isAlreadyRegistered = 
             await session.run(
-                `MATCH (n { email: '${userEmail}' })
+                `MATCH (n:User { email: '${userEmail}' })
                 RETURN n`
             );
             if (isAlreadyRegistered.records.length) {
@@ -53,7 +53,7 @@ exports.verifyUser = async (req, res) => {
     try {
         const isUser = 
             await session.run(
-                `MATCH (n { email: '${userEmail}', password: '${userPassword}' })
+                `MATCH (n:User { email: '${userEmail}', password: '${userPassword}' })
                 RETURN n`
             );
             // session.close();
