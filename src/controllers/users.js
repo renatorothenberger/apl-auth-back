@@ -14,7 +14,7 @@ function generateToken(params = {}) {
     });
 }
 
-exports.createUser = async (req, res) => {
+exports.createUser = async (req, res) => {    
 
     const userName = req.body.name;
     const userEmail = req.body.email;
@@ -28,7 +28,7 @@ exports.createUser = async (req, res) => {
                 RETURN n`
             );
             if (isAlreadyRegistered.records.length) {
-                res.status(400).send('e-mail já cadastrado');
+                res.status(200).send('e-mail já cadastrado');
             } else {
                 try {
                     const create =
@@ -52,8 +52,9 @@ exports.createUser = async (req, res) => {
 };
 
 exports.verifyUser = async (req, res) => {
-    const userEmail = req.body.email;
-    const userPassword = req.body.password;
+    
+    const userEmail = req.query.email;
+    const userPassword = req.query.password;
 
     try {
         const isUser = 
@@ -64,9 +65,9 @@ exports.verifyUser = async (req, res) => {
             // session.close();
             if(isUser.records.length){
                 const user = isUser.records[0]._fields[0].properties
-                res.status(200).send({sucess: 'Usuário autenticado com sucesso', token: generateToken({email: user.email})});
+                res.status(200).send({name: user.name, token: generateToken({email: user.email})});
             } else {
-                res.status(400).send({error: 'E-mail ou Senha incorreto'});
+                res.status(200).send('E-mail ou Senha incorreto');
             }
     } finally {
         // await session.close();

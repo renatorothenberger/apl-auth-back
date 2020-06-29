@@ -4,7 +4,7 @@ const usersController = require('./controllers/users');
 
 const app = express();
 app.use(bodyParser.json());
-const port = 8080;
+const port = 8000;
 
 app.listen(port, () => {
     console.log(`Servidor ligado. Acesse em  http://localhost:${port}`);
