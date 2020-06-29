@@ -1,18 +1,12 @@
 const neo4j = require('neo4j-driver');
-const jwt = require('jsonwebtoken');
 // const bcrypt = require('bcrypt');
 // const cryptPassword = require('../utils/utils');
 
-const authConfig = require('../utils/auth.json');
+const jwt = require('../utils/jwt');
 
 const driver = neo4j.driver('bolt://localhost:7687', neo4j.auth.basic('neo4j', 'rafa12rafa'));
 const session = driver.session();
 
-function generateToken(params = {}) {
-    return jwt.sign(params, authConfig.secret, {
-        expiresIn: 86400,
-    });
-}
 
 exports.createUser = async (req, res) => {    
 
@@ -65,7 +59,7 @@ exports.verifyUser = async (req, res) => {
             // session.close();
             if(isUser.records.length){
                 const user = isUser.records[0]._fields[0].properties
-                res.status(200).send({name: user.name, token: generateToken({email: user.email})});
+                res.status(200).send({name: user.name, token: jwt.generateToken({email: user.email})});
             } else {
                 res.status(200).send('E-mail ou Senha incorreto');
             }
